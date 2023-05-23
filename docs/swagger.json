@@ -1,0 +1,927 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "car-management-api",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000/"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Users",
+      "description": "Users API Collection"
+    },
+    {
+      "name": "Cars",
+      "description": "Cars API Collection"
+    }
+  ],
+  "paths": {
+    "/api/auth/login": {
+      "post": {
+        "tags": ["Users"],
+        "summary": "Users login",
+        "description": "Users login by email and password",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "email",
+                    "example": "admin@gmail.com"
+                  },
+                  "password": {
+                    "type": "password",
+                    "example": "watermelon9090"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Login success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Successfully logged in as superadmin!"
+                    },
+                    "email": {
+                      "type": "string",
+                      "example": "users@mail.com"
+                    },
+                    "token": {
+                      "type": "string",
+                      "example": "superadmin dg7eafbjhsdabvayuv... (alphanumeric random generate token)"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error wrong password",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "oops, wrong password! Please input the correct one."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/admin/register": {
+      "post": {
+        "tags": ["Users"],
+        "security": [
+          {
+            "prefix": []
+          }
+        ],
+        "summary": "Users registration as admin",
+        "description": "Create new user with role an admin (only superadmin can access it)",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "fullName": {
+                    "type": "string",
+                    "example": "Admin Semangka"
+                  },
+                  "email": {
+                    "type": "email",
+                    "example": "admin@mail.com"
+                  },
+                  "password": {
+                    "type": "password",
+                    "example": "inipassadmin"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success registered new admin",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "new user registered successfully!"
+                    },
+                    "user": {
+                      "type": "object",
+                      "properties": {
+                        "email": {
+                          "type": "email",
+                          "example": "suzuki@gmail.com"
+                        },
+                        "token": {
+                          "type": "string",
+                          "example": "eyJhbGciOiJIUzI1NiIsInR5cCI... (alphanumeric random generate token)"
+                        },
+                        "name": {
+                          "type": "string",
+                          "example": "Admin Semangka"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The email already registered",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "user email already exists"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid superadmin token.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Invalid token. Restricted for superadmin only."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/member/register": {
+      "post": {
+        "tags": ["Users"],
+        "summary": "Users registration as member",
+        "description": "Register a new user with role as member.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "fullName": {
+                    "type": "string",
+                    "example": "Bregsi AJ"
+                  },
+                  "email": {
+                    "type": "email",
+                    "example": "bregsia@mail.com"
+                  },
+                  "password": {
+                    "type": "password",
+                    "example": "blueprint123"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success registered new user as member.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "new user registered successfully !"
+                    },
+                    "user": {
+                      "type": "object",
+                      "properties": {
+                        "email": {
+                          "type": "email",
+                          "example": "bregsia@gmail.com"
+                        },
+                        "token": {
+                          "type": "string",
+                          "example": "eyJhbGciOiJIUzI1NiIsInR5cCI... (alphanumeric random generate token)"
+                        },
+                        "name": {
+                          "type": "string",
+                          "example": "Bregsi AJ"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The email already registered",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "user email already exists"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/whoami": {
+      "get": {
+        "tags": ["Users"],
+        "security": [
+          {
+            "prefix": []
+          }
+        ],
+        "summary": "Get details about current user",
+        "description": "This request must be provided with header defined by key Authorization and token with predefined prefixes as value",
+        "responses": {
+          "200": {
+            "description": "Success get current user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "user": {
+                      "type": "string",
+                      "example": "Current user is Admin Semangka"
+                    },
+                    "email": {
+                      "type": "string",
+                      "example": "admin@gmail.com"
+                    },
+                    "token": {
+                      "type": "string",
+                      "example": "eyJhbGciOiJIUzI1NiIsInR5cCI... (alphanumeric random generate token)"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid user token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "please add a valid token"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/cars": {
+      "get": {
+        "tags": ["Cars"],
+        "security": [
+          {
+            "prefix": []
+          }
+        ],
+        "summary": "Get all cars",
+        "description": "Get all available car (restricted for user with role an admin or superadmin only).",
+        "responses": {
+          "200": {
+            "description": "Success get all car",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/Cars"
+                    },
+                    "total": {
+                      "type": "integer",
+                      "example": 1
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid token.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "This request needs a valid admin/superadmin token."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Cars"],
+        "security": [
+          {
+            "prefix": []
+          }
+        ],
+        "summary": "Post a car",
+        "description": "Add new car to database, restricted for admin/superadmin only",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "carName": {
+                    "type": "string",
+                    "example": "Avanza"
+                  },
+                  "rentPrice": {
+                    "type": "integer",
+                    "example": 400000
+                  },
+                  "size": {
+                    "type": "string",
+                    "example": "Large"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully added a car",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "New car successfully ADDED by {user full name}."
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/Cars"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid token.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "This request needs a valid admin/superadmin token."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/cars/{id}": {
+      "get": {
+        "tags": ["Cars"],
+        "security": [
+          {
+            "prefix": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true
+          }
+        ],
+        "summary": "Get car by id",
+        "description": "Get available car by id (restricted for user with role an admin or superadmin only).",
+        "responses": {
+          "200": {
+            "description": "Success get car",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/Cars"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid token.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "This request needs a valid admin/superadmin token."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The id is not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Car with id 20 is not found."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["Cars"],
+        "security": [
+          {
+            "prefix": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true
+          }
+        ],
+        "summary": "Update car by id",
+        "description": "Update car by id (restricted for user with role an admin or superadmin only).",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "carName": {
+                    "type": "string",
+                    "example": "Toyota Alphard"
+                  },
+                  "rentPrice": {
+                    "type": "integer",
+                    "example": 800000
+                  },
+                  "size": {
+                    "type": "string",
+                    "example": "Large"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully updated car",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Car with id 26 successfully UPDATED by {user full name}."
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "carName": {
+                          "type": "string",
+                          "example": "Toyota Alphard"
+                        },
+                        "rentPrice": {
+                          "type": "integer",
+                          "example": 800000
+                        },
+                        "size": {
+                          "type": "string",
+                          "example": "Large"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid token.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "This request needs a valid admin/superadmin token."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The id is not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Car with id 20 is not found."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Cars"],
+        "security": [
+          {
+            "prefix": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true
+          }
+        ],
+        "summary": "Delete car by id",
+        "description": "Delete existing car by id (restricted for user with role an admin or superadmin only).",
+        "responses": {
+          "200": {
+            "description": "Success delete car",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "status": {
+                          "type": "string",
+                          "example": "success"
+                        },
+                        "message": {
+                          "type": "string",
+                          "example": "Car with id 26 successfully DELETED by Admin"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid token.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "This request needs a valid admin/superadmin token."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The id is not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Car with id 20 is not found."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/cars/history/{id}": {
+      "get": {
+        "tags": ["Cars"],
+        "security": [
+          {
+            "prefix": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true
+          }
+        ],
+        "summary": "Track any changes to the cars' data",
+        "description": "Get the histories of every cars' data, grouped by car id. (created by, lastest updated by, and deleted by)",
+        "responses": {
+          "200": {
+            "description": "Success get histories",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "get histories of car with id 26"
+                    },
+                    "histories": {
+                      "$ref": "#/components/schemas/Histories"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid user token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "This request needs a valid token"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Car id is not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Car with id 20 is not found."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Users": {
+        "type": "object",
+        "properties": {
+          "fullName": {
+            "type": "string",
+            "example": "Bregsi AJ"
+          },
+          "email": {
+            "type": "string",
+            "example": "bregsia@mail.com"
+          },
+          "password": {
+            "type": "string",
+            "example": "$2b$10$pg0ivHyurpBkVjUkO5LDUegnyP42nC3bPdNOk0ECaT0zsdgDiHASa"
+          },
+          "token": {
+            "type": "string",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRvbW15YW0yMUBnbWFpbC5jb20i..."
+          },
+          "updatedAt": {
+            "type": "date",
+            "example": "2022-10-17T14:04:48.389Z"
+          },
+          "createdAt": {
+            "type": "date",
+            "example": "2022-10-17T14:04:48.389Z"
+          }
+        }
+      },
+      "Cars": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 19
+          },
+          "carName": {
+            "type": "string",
+            "example": "Xenia Greentea"
+          },
+          "rentPrice": {
+            "type": "integer",
+            "example": 250000
+          },
+          "size": {
+            "type": "string",
+            "example": "Medium"
+          },
+          "createdAt": {
+            "type": "date",
+            "example": "2022-10-20T09:09:51.876Z"
+          },
+          "updatedAt": {
+            "type": "date",
+            "example": "2022-10-20T09:09:51.876Z"
+          }
+        }
+      },
+      "Histories": {
+        "type": "object",
+        "properties": {
+          "carId": {
+            "type": "integer",
+            "example": 26
+          },
+          "description": {
+            "type": "string",
+            "example": "New car successfully ADDED/UPDATES/DELETED by Admin"
+          },
+          "atTime": {
+            "type": "date",
+            "example": "2022-10-21T08:52:28.343Z"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "prefix": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "Authorization",
+        "description": "Please include the token with prefix as value of header Authorization"
+      }
+    }
+  }
+}
